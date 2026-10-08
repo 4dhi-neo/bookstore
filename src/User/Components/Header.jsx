@@ -1,4 +1,4 @@
-import React,{use, useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
@@ -10,9 +10,26 @@ import { FaUserCircle } from "react-icons/fa";
 
 
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../../api/axiosInstance';
 
 function Header() {
   const [dropdown,setDropdown]=useState(false)
+  const [token,setToken]=useState("")
+  const [dp,setDp]=useState("")
+  const [userName,setUserName]=useState("")
+
+  useEffect(()=>{
+      if(sessionStorage.getItem('token')&&sessionStorage.getItem('user')){
+        const userToken=sessionStorage.getItem('token')
+        const userObj =JSON.parse(sessionStorage.getItem('user'))
+        console.log(userObj)
+        setToken(userToken)
+        setDp(userObj.picture)
+        setUserName(userObj.username)
+      }
+  },[token])
+
+  
   return (
     <>
       <div className='w-full'>
@@ -35,18 +52,41 @@ function Header() {
             <FaXTwitter />
 
             <FaFacebook />
-
-            <Link
+            {
+              token== "" ?
+               <Link
               to={'/auth'}
               className='flex gap-1 items-center border-2 px-1 py-2 rounded-lg hover:bg-black hover:text-white'
             >
               <FaUser />{' '}
               Login
             </Link>
-            <div className="relative">
+            :
+             <div className="relative">
               <button className='flex gap-1 items-center border-2 px-1 py-2 rounded-lg' onClick={()=>{setDropdown(!dropdown)}}>
-                <FaUserCircle />{' '}
-                user{' '}
+                {
+                  dp==""?
+                  <>
+                   <FaUserCircle />{' '}
+                   </>
+                   :
+                   dp.includes("lh3.googleusercontent.com")?
+                   <img src={dp} alt="" width={'30px'} className='rounded-full'/>
+                   :
+                   <img src={`${axiosInstance.defaults.baseURL}/uploads/${dp}`} alt="" width={'50px'} />
+
+                }
+                {
+                  userName=="" ?
+                  <>
+                   user{' '}
+                  </>
+                  :
+                  <>{userName}</>
+
+                }
+               
+               
                 {
                   dropdown?
                   <FaCaretDown />
@@ -64,6 +104,12 @@ function Header() {
                 </div>
               }
             </div>
+
+
+            }
+
+           
+           
 
           </div>
 
