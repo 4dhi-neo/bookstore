@@ -1,13 +1,42 @@
-import React from "react";
+
+import React,{useRef} from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-
-
+import emailjs from '@emailjs/browser'
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { IoIosSend } from "react-icons/io";
+import { ref } from "yup";
+import { toast,ToastContainer } from "react-toastify/unstyled";
+
 function Contact() {
+
+  const form=useRef()
+  const PUBLIC_KEY=import.meta.env.VITE_PUBLIC_KEY
+  const SERVICE_ID=import.meta.env.VITE_SERVICE_ID
+  const TEMPLATE_ID=import.meta.env.VITE_TEMPLATE_ID
+
+
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+    const {user_name,user_email,message}=form.current
+    if(user_email && user_name && message){
+      emailjs.sendForm(SERVICE_ID,TEMPLATE_ID,form.current,{publicKey:PUBLIC_KEY}).then(()=>{
+      console.log("SUCCESS")
+      toast.success("Thanks for your Feedback")
+      form.current.reset()
+    }).catch((error)=>{
+      console.log("Failed"+error.text)
+      toast.error("Feedback Snding Failed!")
+    })
+    }
+    else{
+      toast.warning("Enter Valid Inputs!")
+    }
+    
+  }
+
   return (
     <>
       <Header />
@@ -48,35 +77,35 @@ function Contact() {
           {/* form */}
           <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-gray-400 w-full p-5">
-              <div className="">
+                <form ref={form} onSubmit={handleSubmit}>
                 <input
                   type="text"
-                  name=""
+                  name="user_name"
                   id=""
-                  placeholder="email"
+                  placeholder="Name"
                   className="bg-white p-3 border w-full mb-3"
                 />
                 <input
                   type="text"
-                  name=""
+                  name="user_email"
                   id=""
-                  placeholder="phone"
+                  placeholder="Email"
                   className="bg-white p-3 border w-full mb-3"
                 />
                 <textarea
                   type="text"
-                  name=""
+                  name="message"
                   id=""
-                  placeholder="massege"
+                  placeholder="Message"
                   className="bg-white p-3 border w-full mb-3"
                 />
-                <button className="btn bg-black text-white w-full py-3 flex items-center justify-center gap-3 hover:bg-gray-600">
+                <button type="submit" className="btn bg-black text-white w-full py-3 flex items-center justify-center gap-3 hover:bg-gray-600">
                   send
                   <span>
                     <IoIosSend />
                   </span>
                 </button>
-              </div>
+              </form>
             </div>
             <div>
               <iframe
@@ -92,6 +121,7 @@ function Contact() {
           </div>
         </section>
       </div>
+      <ToastContainer position="top-center"/>
       <Footer />
     </>
   );

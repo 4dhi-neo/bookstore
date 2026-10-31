@@ -9,7 +9,7 @@ function AdminSidebar() {
   const location = useLocation();
 
   return (
-    <div className="bg-sky-600 min-h-[70vh] flex items-center">
+    <div className="bg-sky-600 min-h-['70vh'] flex items-center">
       
       <div className="flex flex-col items-center gap-3 w-full h-full">
 

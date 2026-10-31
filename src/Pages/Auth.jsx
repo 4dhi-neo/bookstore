@@ -11,10 +11,13 @@ import { ToastContainer, toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext, { authContext } from "../contextAPI/AuthContext";
 
 function Auth() {
   const [authStatus, setAuthStatus] = useState(false);
   const nav=useNavigate()
+  const{role,setRole,authUser,setAuthUser}=useContext(authContext)
 
   const formik = useFormik({
     initialValues: {
@@ -53,26 +56,37 @@ function Auth() {
   };
 
   const handleLogin = async (data) => {
-    const response = await userLoginApi(data);
+    try{
+      const response = await userLoginApi(data);
     console.log(response);
     if (response.status === 200) {
       sessionStorage.setItem("token", response.data.token);
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
       toast.success("Login Successfull!!");
+      setAuthUser(true)
       setTimeout(() => {
         
-      if (response.data.user.role === "admin") {
+      if (response.data.user.role === "Admin") {
+        setRole("Admin")
         nav("/admin");
       } else {
+        nav("user")
         nav("/");
       }
         
-      }, 2000);
+      }, 1500);
 
     } else {
       toast.error("Login Failed!!");
     }
-  };
+
+    }
+    catch(error){
+      console.log(err)
+      toast.error("Something Went Wrong")
+    }
+    
+  }
 
   const handleGoogleLogin = async (credentialResponse) => {
     console.log(credentialResponse);
@@ -84,10 +98,13 @@ function Auth() {
       sessionStorage.setItem("token", response.data.token);
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
       toast.success("Login Successfull!!");
+      setAuthUser(true)
       setTimeout(() => {
           if (response.data.user.role === "admin") {
+            setRole("Admin")
         nav("/admin");
       } else {
+        setRole("/user")
         nav("/");
       }
         

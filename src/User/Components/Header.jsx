@@ -6,6 +6,9 @@ import { FaUser } from "react-icons/fa";
 import { FaCaretDown } from "react-icons/fa";
 import { FaCaretUp } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import AuthContext, { authContext } from '../../contextAPI/AuthContext';
+import { useContext } from 'react';
 
 
 
@@ -17,6 +20,8 @@ function Header() {
   const [token,setToken]=useState("")
   const [dp,setDp]=useState("")
   const [userName,setUserName]=useState("")
+  const nav=useNavigate()
+  const{setAuthUser}=useContext(authContext)
 
   useEffect(()=>{
       if(sessionStorage.getItem('token')&&sessionStorage.getItem('user')){
@@ -28,6 +33,12 @@ function Header() {
         setUserName(userObj.username)
       }
   },[token])
+
+  const logout=()=>{
+    setAuthUser(false)
+    sessionStorage.clear()
+    nav('/auth')
+  }
 
   
   return (
@@ -100,7 +111,7 @@ function Header() {
                 dropdown&&
                 <div className="border-2 rounded-sm absolute bg-white">
                   <Link to={'/profile'} className='border-b-2 px-1 hover:bg-gray-300'>profile</Link>
-                  <p className="text-red-600 px-1 hover:bg-gray-300">Logout</p>
+                  <p className="text-red-600 px-1 hover:bg-gray-300" onClick={logout}>Logout</p>
                 </div>
               }
             </div>
