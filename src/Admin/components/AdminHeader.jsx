@@ -24,7 +24,7 @@ function AdminHeader() {
       <div className="w-full">
         <div className="w-full p-3 flex justify-between">
           <div className="flex gap-3 items-center">
-            <img src="/bookstoreicon.png" alt="icon" className="w-[60px]" />
+            <img src="/bookstoreicon.png" alt="icon" className="w-['60px']" />
             <h1 className="text-3xl">BOOK STORE</h1>
           </div>
           <button
