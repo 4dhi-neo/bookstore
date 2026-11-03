@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AdminHeader from "../Components/AdminHeader";
+import AdminHeader from "../Components1/AdminHeader";
 import Footer from "../../User/Components/Footer";
-import AdminSidebar from "../Components/AdminSidebar";
+import AdminSidebar from "../Components1/AdminSidebar";
 import {
   adminAllBookApi,
   adminApproveBookApi,

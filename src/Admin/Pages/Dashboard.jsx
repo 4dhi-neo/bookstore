@@ -1,6 +1,6 @@
 import React from "react";
-import AdminHeader from "../Components/AdminHeader";
-import AdminSidebar from "../Components/AdminSidebar";
+import AdminHeader from "../Components1/AdminHeader";
+import AdminSidebar from "../Components1/AdminSidebar";
 import Footer from "../../User/Components/Footer";
 import { FaBook } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
